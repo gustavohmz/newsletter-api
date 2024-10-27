@@ -17,9 +17,9 @@ ENV \
     mongoDb="newsletter-app" \
     mongoNewsletterCollection="newsletters" \
     mongoSubscriberCollection="subscribers" \
-    emailSender="gustavohdzmz03@gmail.com" \
-    emailPass="mC2D4tB95jh3OsAM" \
-    smtpServer="smtp-relay.brevo.com" \
+    emailSender="postmaster@sandbox2671e155d0ea48bfaff044f1e55edfb4.mailgun.org" \
+    emailPass="e25f082ec2536527b01fc10f114989ee-784975b6-92a16f66" \
+    smtpServer="smtp.mailgun.org" \
     smtpPort=587
 
 # Ejecuta la aplicación al iniciar el contenedor

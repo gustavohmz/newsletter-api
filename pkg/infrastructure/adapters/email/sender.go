@@ -4,9 +4,10 @@ import (
 	"crypto/tls"
 	"encoding/base64"
 	"io"
-	domain "newsletter-app/pkg/domain/models"
 	"os"
 	"strconv"
+
+	domain "newsletter-app/pkg/domain/models"
 
 	"gopkg.in/gomail.v2"
 )
@@ -15,13 +16,13 @@ type EmailSender interface {
 	Send(subject, body string, to []string, attachments []*domain.Attachment) error
 }
 
-type BrevoEmailSender struct{}
+type MailerSendEmailSender struct{}
 
-func NewBrevoEmailSender() EmailSender {
-	return &BrevoEmailSender{}
+func NewMailerSendEmailSender() EmailSender {
+	return &MailerSendEmailSender{}
 }
 
-func (b *BrevoEmailSender) Send(subject, body string, to []string, attachments []*domain.Attachment) error {
+func (m *MailerSendEmailSender) Send(subject, body string, to []string, attachments []*domain.Attachment) error {
 	emailSender := os.Getenv("emailSender")
 	emailPass := os.Getenv("emailPass")
 	smtpServer := os.Getenv("smtpServer")

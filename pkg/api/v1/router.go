@@ -19,7 +19,7 @@ func SetupRouter() *mux.Router {
 	var subscriberService ports.SubscriberServicePort = service.NewSubscriberService(subscriberRepo)
 	var newsletterService ports.NewsletterServicePort = service.NewNewsletterService(newsletterRepo, subscriberRepo)
 
-	var emailSender email.EmailSender = email.NewBrevoEmailSender()
+	var emailSender email.EmailSender = email.NewMailerSendEmailSender()
 
 	// Routes configuration for subscribers
 	r.HandleFunc("/api/v1/subscribe/{email}/{category}", handlers.SubscribeHandler(subscriberService)).Methods("POST")
