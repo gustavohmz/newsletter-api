@@ -1,0 +1,371 @@
+basePath: /api/v1
+definitions:
+  domain.Attachment:
+    properties:
+      data:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  domain.Newsletter:
+    properties:
+      attachments:
+        items:
+          $ref: '#/definitions/domain.Attachment'
+        type: array
+      category:
+        type: string
+      content:
+        type: string
+      id:
+        example: ""
+        type: string
+      name:
+        type: string
+      subject:
+        type: string
+    type: object
+  domain.Subscriber:
+    properties:
+      category:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      subscription_date:
+        type: string
+    type: object
+  request.Attachment:
+    properties:
+      data:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  request.UpdateNewsletterRequest:
+    properties:
+      attachments:
+        items:
+          $ref: '#/definitions/request.Attachment'
+        type: array
+      category:
+        type: string
+      content:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      subject:
+        type: string
+    type: object
+  service.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: gustavohdzmz@gmail.com
+    name: Gustavo Hernandez
+  description: API to manage newsletters.
+  title: Newsletter API
+  version: "1.0"
+paths:
+  /newsletters:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of newsletters with optional search and pagination
+        parameters
+      parameters:
+      - description: Name of the newsletter to search for
+        in: query
+        name: name
+        type: string
+      - description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page for pagination
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Get a list of newsletters
+      tags:
+      - newsletters
+    post:
+      consumes:
+      - application/json
+      description: Allows an admin user to create a new newsletter
+      parameters:
+      - description: Newsletter details
+        in: body
+        name: newsletter
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Newsletter'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Create a new newsletter
+      tags:
+      - newsletters
+    put:
+      consumes:
+      - application/json
+      description: Allows an admin user to update an existing newsletter
+      parameters:
+      - description: Update newsletter details
+        in: body
+        name: updateRequest
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateNewsletterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Update an existing newsletter
+      tags:
+      - newsletters
+  /newsletters/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Allows an admin user to delete a newsletter
+      parameters:
+      - description: ID of the newsletter to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Delete a newsletter
+      tags:
+      - newsletters
+  /newsletters/send/{newsletterID}:
+    post:
+      consumes:
+      - application/json
+      description: Allows an admin user to send a newsletter to a list of subscribers
+      parameters:
+      - description: ID of the newsletter to be sent
+        in: path
+        name: newsletterID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Send newsletter to subscribers
+      tags:
+      - newsletters
+  /subscribe/{email}/{category}:
+    post:
+      consumes:
+      - application/json
+      description: Allows a user to subscribe to the newsletter
+      parameters:
+      - description: Email address to subscribe
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: Category to subscribe to
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Subscribe to the newsletter
+      tags:
+      - subscribers
+  /subscribers:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of subscribers with optional search and pagination
+        parameters
+      parameters:
+      - description: Email address of the subscriber to search for
+        in: query
+        name: email
+        type: string
+      - description: Category of the subscriber to search for
+        in: query
+        name: category
+        type: string
+      - description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page for pagination
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Get a list of subscribers
+      tags:
+      - subscribers
+  /subscribers/{email}/{category}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a subscriber by email address
+      parameters:
+      - description: Email address to get details
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: Category to subscribe to
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Subscriber'
+        "404":
+          description: Subscriber not found
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Get subscriber by email and category
+      tags:
+      - subscribers
+  /unsubscribe/{email}/{category}:
+    delete:
+      consumes:
+      - application/json
+      description: Allows a user to unsubscribe from the newsletter
+      parameters:
+      - description: Email address to unsubscribe
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: Category to subscribe to
+        in: path
+        name: category
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/service.ErrorResponse'
+      summary: Unsubscribe from the newsletter
+      tags:
+      - subscribers
+schemes:
+- http
+swagger: "2.0"
