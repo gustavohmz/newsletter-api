@@ -96,8 +96,9 @@ func (s *NewsletterService) SendNewsletter(w http.ResponseWriter, r *http.Reques
 
 		emailCategoryConcatenation := fmt.Sprintf("%s|%s", subscriber.Email, subscriber.Category)
 		newsletterContent := strings.ReplaceAll(newsletter.Content, "{email}", emailCategoryConcatenation)
+		urlUnsubscribe := strings.ReplaceAll(newsletterContent, "{hostDomain}", "http://localhost:4200/")
 
-		err = emailSender.Send(newsletter.Subject, newsletterContent, []string{subscriber.Email}, decodedAttachments)
+		err = emailSender.Send(newsletter.Subject, urlUnsubscribe, []string{subscriber.Email}, decodedAttachments)
 		if err != nil {
 			fmt.Printf("Error sending newsletter to %s: %s\n", subscriber.Email, err.Error())
 			continue

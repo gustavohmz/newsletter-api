@@ -10,6 +10,7 @@ import (
 	_ "newsletter-app/docs"
 
 	"github.com/gorilla/handlers"
+	"github.com/joho/godotenv"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -23,17 +24,15 @@ import (
 // @schemes http
 func main() {
 
-	// Load environment variables from the .env file
-	/*err := godotenv.Load()
+	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Error loading .env file")
 		return
-	}*/
+	}
 
 	mongoUrl := os.Getenv("mongoUrl")
 	fmt.Println("MongoDB:", mongoUrl)
-	// Use := to declare and assign a new variable (err) for the connection error.
-	err := mongodb.Connect(mongoUrl)
+	err = mongodb.Connect(mongoUrl)
 	if err != nil {
 		fmt.Println("Error al conectar a MongoDB:", err)
 		return
